@@ -11,12 +11,10 @@ import (
 	"url-checker/models"
 )
 
-// FIXME: by default, every output file must be written below a folder "tmp/". You can choose the name of the file but the location must be within this folder.
-// FIXME: each log entry (in the files) has to begin with the timestamp formatted in the following way: yyyy-MM-dd hh:mm
 func main() {
 	asyncExecution := flag.Bool("async", false, "Run in async mode")
 	splitFile := flag.Bool("split", false, "Create a file for each domain")
-	folderPath := flag.String("path", logic.GetLocalPath(), "To specify a folder path to save the output file(s)")
+	outputFileName := flag.String("file", "url_list_status.txt", "To specify a folder path to save the output file(s)")
 	flag.Parse()
 
 	t := time.Now()
@@ -25,7 +23,10 @@ func main() {
 	}()
 	logic.PrintLog("START URL CHECK")
 	file, err := os.Open("url.txt")
-	logic.ErrorCheck(err)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 	defer file.Close()
 	urlList := bufio.NewScanner(file)
 	if *asyncExecution {
@@ -36,18 +37,25 @@ func main() {
 				go logic.CheckStatusAsync(urlList.Text(), urlStatusCh)
 			}
 		}
-		// BUG: always checks for urlList.Err() and return it
+		err := urlList.Err()
+		if err != nil {
+			fmt.Println(err)
+		}
 		for i := 0; i < lines; i++ {
 			msg := <-urlStatusCh
-			logic.AppendToFile(msg, splitFile, folderPath)
+			logic.AppendToFile(msg, splitFile, outputFileName)
 		}
 	} else {
 		for urlList.Scan() {
 			if urlList.Text() != "" {
 				result := logic.CheckDomainStatus(urlList.Text())
-				logic.AppendToFile(result, splitFile, folderPath)
+				logic.AppendToFile(result, splitFile, outputFileName)
 			}
 		}
-		// BUG: always checks for urlList.Err() and return it
+		err := urlList.Err()
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 	}
 }

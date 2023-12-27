@@ -1,7 +1,7 @@
 # URL-CHECKER
 
-To check 60 urls status from file.
-By default the output path is the project folder, it's possible to specify a different path by using the flag `-path`, it's possible to specify a different local folder or a folder in a different path; In case the folder doesn't exist it'll be created.
+To check 60 urls status from the file `url.txt`.
+By default the output file name is `url_list_status.txt` located in the `tmp/` folder of the project, it's possible to specify a different file name by using the flag `-file`, in case the file doesn't exist, it'll be created. This option cannot be used with the flag `-split`.
 The check can be performed in a sync mode which is the default way or in an async mode by specifying the flag `-async`.
 For each mode, it's possible to create a file for each domain by using the flag `-split`.
 
@@ -19,16 +19,10 @@ Create a file for each domain
 go run . -split
 ```
 
-To specify a different folder but in local path
+To specify a different file name
 
 ```
-go run . -path=<FOLDERNAME>
-```
-
-To specify a different path
-
-```
-go run . -path=<PATH/FOLDERNAME>
+go run . -file=<FILENAME>
 ```
 
 ## ASYNC
@@ -45,14 +39,8 @@ Create a file for each domain
 go run . -async -split
 ```
 
-To specify a different folder but in local path
+To specify a different file name
 
 ```
-go run . -async -path=<FOLDERNAME>
-```
-
-To specify a different path
-
-```
-go run . -async -path=<PATH/FOLDERNAME>
+go run . -async -file=<FILENAME>
 ```
