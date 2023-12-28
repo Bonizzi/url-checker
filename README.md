@@ -44,3 +44,17 @@ To specify a different file name
 ```
 go run . -async -file=<FILENAME>
 ```
+
+## Web Server
+
+To have better control over the URL answers, we've defined a custom web server with the following details. Those are the technical specs of our server:
+
+1. Hostname: `localhost:8000`
+1. HTTP verb to use: `GET`
+1. Endpoints:
+    1. `/health` endpoint that immediately replies with the `200` status code
+    1. `/slowdown?wait=<numberOfSecondsToWait>` endpoint that replies with the `200` status code after the amount of time specified in the query string is elapsed
+    1. `/broken` endpoint that immediately replies with the `500` status code
+
+Feel free to use the packages you prefer.
+> Everything omitted is up to you.
