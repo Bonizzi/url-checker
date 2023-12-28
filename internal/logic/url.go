@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
@@ -17,8 +18,8 @@ func CheckDomainStatus(url string) models.DomainStatus {
 	urlCheck.Url = url
 	httpClient := http.Client{Timeout: 5 * time.Second}
 	response, err := httpClient.Get(url)
-	// TODO: do something with the `err` variable
 	if err != nil {
+		fmt.Println("Http GET Error", err)
 		urlCheck.Status = http.StatusRequestTimeout
 		return urlCheck
 	}
