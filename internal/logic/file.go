@@ -12,7 +12,7 @@ import (
 	"url-checker/models"
 )
 
-func AppendToFile(urlCheck models.DomainStatus, split *bool, outputFileName *string) {
+func AppendToFile(urlCheck models.DomainStatus, split *bool, outputFileName *string) error {
 	var file *os.File
 	folder := "tmp"
 	if !doesExist(folder, "") {
@@ -27,32 +27,30 @@ func AppendToFile(urlCheck models.DomainStatus, split *bool, outputFileName *str
 		var err error
 		file, err = os.OpenFile(filepath.Join(filePath, createFileName(urlCheck.Url, defaultDailyFolder, filePath)), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o644)
 		if err != nil {
-			fmt.Println(err)
-			return
+			return fmt.Errorf("[AppendToFile]: Error while opening file, split file mode %w", err)
 		}
 		defer file.Close()
 	} else {
 		var err error
 		file, err = os.OpenFile(filepath.Join(folder, checkFileExtention(outputFileName)), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o644)
 		if err != nil {
-			fmt.Println(err)
-			return
+			return fmt.Errorf("[AppendToFile]: Error while opening file %w", err)
 		}
 		defer file.Close()
 	}
-	_, err := file.WriteString(time.Now().Format("2006-01-02 15:04") + " " + urlCheck.Url + " " + urlCheck.Status + "\n")
+	_, err := file.WriteString(time.Now().Format("2006-01-02 15:04") + " " + urlCheck.Url + " " + fmt.Sprintf("%d", urlCheck.Status) + "\n")
 	if err != nil {
-		fmt.Println(err)
-		return
+		return fmt.Errorf("[AppendToFile]: Error while writing on file %w", err)
 	}
 	PrintLog(urlCheck.Url + " - Checked and saved")
+	return err
 }
 
 func PrintLog(msg string) {
 	fmt.Println(time.Now().Format("2006-01-02 15:04:05")+":", msg)
 }
 
-func GetFileNumLines(file *os.File) int {
+func GetFileNumLines(file *os.File) (int, error) {
 	listOfAllUrls := bufio.NewScanner(file)
 	count := 0
 	for listOfAllUrls.Scan() {
@@ -62,13 +60,13 @@ func GetFileNumLines(file *os.File) int {
 	}
 	err := listOfAllUrls.Err()
 	if err != nil {
-		fmt.Println(err)
+		return 0, fmt.Errorf("[GetFileNumLines]: Error while retriving file number of lines %w", err)
 	}
 	_, err2 := file.Seek(0, io.SeekStart)
 	if err2 != nil {
-		fmt.Println(err2)
+		return 0, fmt.Errorf("[GetFileNumLines]: Error resetting file pointer %w", err2)
 	}
-	return count
+	return count, err
 }
 
 func doesExist(folderPath string, fileName string) bool {
@@ -86,7 +84,7 @@ func doesExist(folderPath string, fileName string) bool {
 
 func checkFileExtention(fileName *string) string {
 	if filepath.Ext(*fileName) == "" {
-			*fileName += ".txt"
+		*fileName += ".txt"
 	}
 	return *fileName
 }
