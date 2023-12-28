@@ -23,6 +23,8 @@ func main() {
 	}()
 	logic.PrintLog("START URL CHECK")
 	file, err := os.Open("url.txt")
+	// TODO: error management
+	// https://earthly.dev/blog/golang-errors/
 	if err != nil {
 		fmt.Println(err)
 		return
