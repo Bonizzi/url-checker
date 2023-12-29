@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"url-checker/models"
+	"url-checker/cmd/url-check/models"
 )
 
 func CheckStatusAsync(url string, ch chan models.DomainStatus) {

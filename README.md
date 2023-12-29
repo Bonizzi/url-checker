@@ -10,19 +10,19 @@ For each mode, it's possible to create a file for each domain by using the flag 
 The result of each domain in a single file
 
 ```
-go run .
+go run cmd/url-check/main.go
 ```
 
 Create a file for each domain
 
 ```
-go run . -split
+go run cmd/url-check/main.go -split
 ```
 
 To specify a different file name
 
 ```
-go run . -file=<FILENAME>
+go run cmd/url-check/main.go -file=<FILENAME>
 ```
 
 ## ASYNC
@@ -30,19 +30,19 @@ go run . -file=<FILENAME>
 The result of each domain in a single file
 
 ```
-go run . -async
+go run cmd/url-check/main.go -async
 ```
 
 Create a file for each domain
 
 ```
-go run . -async -split
+go run cmd/url-check/main.go -async -split
 ```
 
 To specify a different file name
 
 ```
-go run . -async -file=<FILENAME>
+go run cmd/url-check/main.go -async -file=<FILENAME>
 ```
 
 ## Web Server
@@ -59,5 +59,5 @@ To have better control over the URL answers, we've defined a custom web server w
 To run the server:
 
 ```
-go run web-server/main.go
+go run cmd/web-server/main.go
 ```

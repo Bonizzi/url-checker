@@ -6,9 +6,8 @@ import (
 	"fmt"
 	"os"
 	"time"
-
-	"url-checker/internal/logic"
-	"url-checker/models"
+	"url-checker/cmd/url-check/internal/logic"
+	"url-checker/cmd/url-check/models"
 )
 
 func main() {

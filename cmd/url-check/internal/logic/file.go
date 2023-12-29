@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"url-checker/models"
+	"url-checker/cmd/url-check/models"
 )
 
 func AppendToFile(urlCheck models.DomainStatus, split *bool, outputFileName *string) error {
@@ -90,9 +90,24 @@ func checkFileExtention(fileName *string) string {
 }
 
 func createFileName(url string, defaultDailyFolder string, filePath string) string {
-	domainNoProtocol := strings.SplitAfter(url, "www.")
-	justDomainName := strings.Split(domainNoProtocol[1], ".")
-	fileName := defaultDailyFolder + "_" + justDomainName[0] + ".txt"
+	var domainNoProtocol []string
+	var justDomainName []string
+	var fileName string
+	if strings.Contains(url, "localhost") {
+		domainNoProtocol = strings.SplitAfter(url, "//")
+		justDomainName = strings.Split(domainNoProtocol[1], ":")
+		justRequest := strings.SplitAfter(justDomainName[1], "/")
+		if strings.Contains(justRequest[1], "?") {
+			requestWithNoParameters := strings.Split(justRequest[1], "?")
+			fileName = defaultDailyFolder + "_" + justDomainName[0] + "_" + requestWithNoParameters[0] + ".txt"
+		} else {
+			fileName = defaultDailyFolder + "_" + justDomainName[0] + "_" + justRequest[1] + ".txt"
+		}
+	} else {
+		domainNoProtocol = strings.SplitAfter(url, "www.")
+		justDomainName = strings.Split(domainNoProtocol[1], ".")
+		fileName = defaultDailyFolder + "_" + justDomainName[0] + ".txt"
+	}
 
 	if doesExist(filePath, fileName) {
 		fileName = strings.ReplaceAll(fileName, justDomainName[0]+".txt", strings.ReplaceAll(domainNoProtocol[1], ".", "_")+".txt")
