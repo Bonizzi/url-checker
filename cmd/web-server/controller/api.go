@@ -16,17 +16,17 @@ import (
 func HealthCheck(w http.ResponseWriter, r *http.Request) {
 	switch method := r.URL; fmt.Sprint(method) {
 	case "/health":
-		if checkGetMethod(w, r, fmt.Sprint(method)) {
+		if checkGetMethod(w, r) {
 			w.WriteHeader(http.StatusOK)
 			w.Write([]byte(fmt.Sprint(http.StatusOK)))
 		}
 	case "/broken":
-		if checkGetMethod(w, r, fmt.Sprint(method)) {
+		if checkGetMethod(w, r) {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(fmt.Sprint(http.StatusInternalServerError)))
 		}
 	default:
-		if checkGetMethod(w, r, fmt.Sprint(method)) {
+		if checkGetMethod(w, r) {
 			SlowHealthCheck(w, r)
 		}
 	}
@@ -52,7 +52,7 @@ func SlowHealthCheck(w http.ResponseWriter, r *http.Request) {
 }
 
 func SlowHealthCheck2(w http.ResponseWriter, r *http.Request) {
-	if !checkGetMethod(w, r, "") {
+	if !checkGetMethod(w, r) {
 		return
 	}
 	urlValues := r.URL.Query()
@@ -68,7 +68,7 @@ func SlowHealthCheck2(w http.ResponseWriter, r *http.Request) {
 }
 
 // FIXME: "endpoint" is not used in this func
-func checkGetMethod(w http.ResponseWriter, r *http.Request, endpoint string) bool {
+func checkGetMethod(w http.ResponseWriter, r *http.Request) bool {
 	if r.Method != "GET" {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		w.Write([]byte(fmt.Sprint(http.StatusMethodNotAllowed)))
