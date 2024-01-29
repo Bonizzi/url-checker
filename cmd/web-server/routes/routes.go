@@ -6,8 +6,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// FIXME: change the name of this file
-
 func RegisterHandlers() *mux.Router {
 	r := mux.NewRouter()
 	r.HandleFunc("/health", controller.HealthCheck)

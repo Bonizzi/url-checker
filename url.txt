@@ -60,4 +60,4 @@ http://www.whatsapp.com
 http://www.amazon.in
 http://localhost:8000/health
 http://localhost:8000/broken
-http://localhost:8000/slowdown?wait=5
+http://localhost:8000/slowdown?wait=7

@@ -67,7 +67,6 @@ func SlowHealthCheck2(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("system health!"))
 }
 
-// FIXME: "endpoint" is not used in this func
 func checkGetMethod(w http.ResponseWriter, r *http.Request) bool {
 	if r.Method != "GET" {
 		w.WriteHeader(http.StatusMethodNotAllowed)
