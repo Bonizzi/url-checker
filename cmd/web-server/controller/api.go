@@ -3,10 +3,8 @@ package controller
 import (
 	"fmt"
 	"log"
-	"math"
 	"net/http"
 	"regexp"
-	"strconv"
 	"time"
 )
 
@@ -51,21 +49,21 @@ func SlowHealthCheck(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func SlowHealthCheck2(w http.ResponseWriter, r *http.Request) {
-	if !checkGetMethod(w, r) {
-		return
-	}
-	urlValues := r.URL.Query()
-	rawWait := urlValues.Get("wait")
-	wait, err := strconv.Atoi(rawWait)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(fmt.Sprintf("err while reading 'wait' tinme: %v\n", err.Error())))
-		return
-	}
-	time.Sleep(time.Duration(math.Abs(float64(wait))) * time.Second)
-	w.Write([]byte("system health!"))
-}
+// func SlowHealthCheck2(w http.ResponseWriter, r *http.Request) {
+// 	if !checkGetMethod(w, r) {
+// 		return
+// 	}
+// 	urlValues := r.URL.Query()
+// 	rawWait := urlValues.Get("wait")
+// 	wait, err := strconv.Atoi(rawWait)
+// 	if err != nil {
+// 		w.WriteHeader(http.StatusBadRequest)
+// 		w.Write([]byte(fmt.Sprintf("err while reading 'wait' tinme: %v\n", err.Error())))
+// 		return
+// 	}
+// 	time.Sleep(time.Duration(math.Abs(float64(wait))) * time.Second)
+// 	w.Write([]byte("system health!"))
+// }
 
 func checkGetMethod(w http.ResponseWriter, r *http.Request) bool {
 	if r.Method != "GET" {
